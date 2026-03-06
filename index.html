@@ -10,10 +10,13 @@
             background-color: #050505;
             color: #e0e0e0;
             font-family: 'Segoe UI', sans-serif;
-            overflow-x: hidden;
+            overflow: hidden; /* Prevent scrollbars from candy */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        header { padding: 20px; text-align: center; border-bottom: 1px solid #222; }
+        header { padding: 20px; text-align: center; border-bottom: 1px solid #222; position: relative; z-index: 10; }
         
         .main-content {
             max-width: 800px;
@@ -23,6 +26,9 @@
             border-radius: 20px;
             text-align: center;
             border: 1px solid #333;
+            flex: 1;
+            position: relative;
+            z-index: 10; /* Content is below the candy layer */
         }
 
         h1 { color: #ff007f; font-size: 2.5rem; }
@@ -33,27 +39,47 @@
             margin-top: 40px;
             padding-top: 20px;
             border-top: 1px solid #222;
+            flex-wrap: wrap;
         }
 
-        .step { flex: 1; padding: 10px; }
+        .step { flex: 1; padding: 10px; min-width: 200px; }
         .step h3 { color: #00ffcc; }
 
-        footer { text-align: center; padding: 40px; color: #666; }
+        .shop-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 35px;
+            background-color: #ff007f;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
 
-        /* Candy Effect */
+        .shop-btn:hover {
+            background-color: #ff3399;
+            box-shadow: 0 0 20px #ff007f;
+            transform: scale(1.05);
+        }
+
+        footer { text-align: center; padding: 40px; color: #666; position: relative; z-index: 10; }
+
+        /* Slower, Layered Candy Effect */
         .candy {
-            position: absolute;
+            position: fixed;
             width: 15px;
             height: 15px;
-            background-color: #ff007f;
             border-radius: 50%;
-            animation: fall linear infinite;
-            z-index: -1;
+            animation: fall linear forwards;
+            pointer-events: none; /* Let clicks pass through to buttons */
+            z-index: 20; /* Higher than content to fall OVER text */
+            top: -20px;
         }
 
         @keyframes fall {
-            from { transform: translateY(-10vh) rotate(0deg); }
-            to { transform: translateY(110vh) rotate(360deg); }
+            from { transform: translateY(0); }
+            to { transform: translateY(105vh); }
         }
     </style>
 </head>
@@ -81,6 +107,8 @@
                 <p>Your candy will be with you before you know it.</p>
             </div>
         </div>
+
+        <a href="https://gawyntgg.github.io/GS-Candy/" class="shop-btn">Back to Shop</a>
     </div>
 
     <footer>
@@ -91,13 +119,21 @@
         function createCandy() {
             const candy = document.createElement('div');
             candy.classList.add('candy');
-            candy.style.left = Math.random() * 100 + 'vw';
+            candy.style.left = Math.random() * 98 + 'vw';
             candy.style.backgroundColor = ['#ff007f', '#00ffcc', '#ffff00', '#ff9900'][Math.floor(Math.random() * 4)];
-            candy.style.animationDuration = Math.random() * 5 + 5 + 's';
+            
+            // Slower speed: 4s to 7s
+            const duration = Math.random() * 3 + 4;
+            candy.style.animationDuration = duration + 's';
+            
             document.body.appendChild(candy);
-            setTimeout(() => { candy.remove(); }, 10000);
+            
+            // Cleanup memory
+            setTimeout(() => { candy.remove(); }, duration * 1000);
         }
-        setInterval(createCandy, 800);
+        
+        // Spawn candy every 300ms for a dense snowfall effect
+        setInterval(createCandy, 300);
     </script>
 </body>
 </html>
