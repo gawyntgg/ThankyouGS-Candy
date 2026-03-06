@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You | GS Candy</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #050505;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', sans-serif;
+            overflow-x: hidden;
+        }
+
+        header { padding: 20px; text-align: center; border-bottom: 1px solid #222; }
+        
+        .main-content {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 40px;
+            background: #111;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+
+        h1 { color: #ff007f; font-size: 2.5rem; }
+        
+        .step-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #222;
+        }
+
+        .step { flex: 1; padding: 10px; }
+        .step h3 { color: #00ffcc; }
+
+        footer { text-align: center; padding: 40px; color: #666; }
+
+        /* Candy Effect */
+        .candy {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: #ff007f;
+            border-radius: 50%;
+            animation: fall linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes fall {
+            from { transform: translateY(-10vh) rotate(0deg); }
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h2>GS CANDY</h2>
+    </header>
+
+    <div class="main-content">
+        <h1>Order Confirmed!</h1>
+        <p>Thank you for choosing GS Candy. Your treats are being prepared with care.</p>
+        
+        <div class="step-container">
+            <div class="step">
+                <h3>01. Order Received</h3>
+                <p>We have safely secured your order details.</p>
+            </div>
+            <div class="step">
+                <h3>02. We Message You</h3>
+                <p>Expect a DM from us shortly to finalize delivery.</p>
+            </div>
+            <div class="step">
+                <h3>03. Enjoy!</h3>
+                <p>Your candy will be with you before you know it.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 GS Candy. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function createCandy() {
+            const candy = document.createElement('div');
+            candy.classList.add('candy');
+            candy.style.left = Math.random() * 100 + 'vw';
+            candy.style.backgroundColor = ['#ff007f', '#00ffcc', '#ffff00', '#ff9900'][Math.floor(Math.random() * 4)];
+            candy.style.animationDuration = Math.random() * 5 + 5 + 's';
+            document.body.appendChild(candy);
+            setTimeout(() => { candy.remove(); }, 10000);
+        }
+        setInterval(createCandy, 800);
+    </script>
+</body>
+</html>
