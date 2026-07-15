@@ -5,22 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thank You | Fanuel and Gawynt Candy</title>
     <style>
-        body {
+        /* 1. Add box-sizing to ensure padding doesn't break widths */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        /* 2. Lock overflow-x on both html and body for mobile browsers */
+        html, body {
             margin: 0;
+            padding: 0;
             background-color: #050505;
             color: #e0e0e0;
             font-family: 'Segoe UI', sans-serif;
-            overflow: hidden; /* Prevent scrollbars from candy */
+            overflow-x: hidden; 
+            overflow-y: hidden; /* Keeps candy from creating vertical scrollbars */
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            /* Fallback for mobile browsers to handle dynamic viewport heights */
+            min-height: 100dvh; 
         }
 
-        header { padding: 20px; text-align: center; border-bottom: 1px solid #222; position: relative; z-index: 10; }
+        header { 
+            padding: 20px; 
+            text-align: center; 
+            border-bottom: 1px solid #222; 
+            position: relative; 
+            z-index: 10; 
+        }
         
         .main-content {
+            width: 90%; /* Ensures margins on smaller screens */
             max-width: 800px;
-            margin: 60px auto;
+            margin: 40px auto;
             padding: 40px;
             background: #111;
             border-radius: 20px;
@@ -28,7 +45,7 @@
             border: 1px solid #333;
             flex: 1;
             position: relative;
-            z-index: 10; /* Content is below the candy layer */
+            z-index: 10;
         }
 
         h1 { color: #ff007f; font-size: 2.5rem; }
@@ -40,10 +57,11 @@
             padding-top: 20px;
             border-top: 1px solid #222;
             flex-wrap: wrap;
+            gap: 20px; /* Added gap for better wrapping spacing */
         }
 
         .step { flex: 1; padding: 10px; min-width: 200px; }
-        .step h3 { color: #00ffcc; }
+        .step h3 { color: #00ffcc; margin-top: 0; }
 
         .shop-btn {
             display: inline-block;
@@ -63,23 +81,59 @@
             transform: scale(1.05);
         }
 
-        footer { text-align: center; padding: 40px; color: #666; position: relative; z-index: 10; }
+        footer { text-align: center; padding: 20px; color: #666; position: relative; z-index: 10; }
 
-        /* Slower, Layered Candy Effect */
         .candy {
             position: fixed;
             width: 15px;
             height: 15px;
             border-radius: 50%;
             animation: fall linear forwards;
-            pointer-events: none; /* Let clicks pass through to buttons */
-            z-index: 20; /* Higher than content to fall OVER text */
+            pointer-events: none;
+            z-index: 20;
             top: -20px;
         }
 
         @keyframes fall {
             from { transform: translateY(0); }
-            to { transform: translateY(105vh); }
+            to { transform: translateY(110vh); } /* Pushed slightly further down to ensure it clears the screen */
+        }
+
+        /* 3. Media Query for Mobile Devices */
+        @media (max-width: 600px) {
+            .main-content {
+                margin: 20px auto;
+                padding: 25px 15px;
+                width: 95%;
+            }
+
+            h1 {
+                font-size: 1.8rem; /* Smaller font for small screens */
+            }
+
+            .step-container {
+                flex-direction: column; /* Stacks the steps vertically */
+                align-items: center;
+                gap: 10px;
+            }
+
+            .step {
+                width: 100%;
+                min-width: unset;
+                padding: 15px 0;
+                border-bottom: 1px solid #222;
+            }
+
+            /* Remove the border from the last step on mobile */
+            .step:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+
+            .shop-btn {
+                width: 100%; /* Makes the button full width for easy tapping */
+                padding: 15px 0;
+            }
         }
     </style>
 </head>
@@ -119,20 +173,19 @@
         function createCandy() {
             const candy = document.createElement('div');
             candy.classList.add('candy');
-            candy.style.left = Math.random() * 98 + 'vw';
+            
+            // Limit to 95vw to prevent triggering horizontal scrollbars on edge cases
+            candy.style.left = Math.random() * 95 + 'vw';
             candy.style.backgroundColor = ['#ff007f', '#00ffcc', '#ffff00', '#ff9900'][Math.floor(Math.random() * 4)];
             
-            // Slower speed: 4s to 7s
             const duration = Math.random() * 3 + 4;
             candy.style.animationDuration = duration + 's';
             
             document.body.appendChild(candy);
             
-            // Cleanup memory
             setTimeout(() => { candy.remove(); }, duration * 1000);
         }
         
-        // Spawn candy every 300ms for a dense snowfall effect
         setInterval(createCandy, 300);
     </script>
 </body>
